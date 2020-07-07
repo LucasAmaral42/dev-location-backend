@@ -5,7 +5,9 @@ const routes = require('./routes')
 
 const app = express();
 
-mongoose.connect('mongodb+srv://ricardo:Zaratustra100!@cluster0-me5bh.mongodb.net/test?retryWrites=true&w=majority', {
+
+
+mongoose.connect('mongodb+srv://dev-location-backend:dev-location-backend-db@cluster0.5qliw.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useUnifiedTopology: true,  
 });
@@ -16,4 +18,4 @@ app.use(routes);
 
 
 
-app.listen(3333);
+app.listen(process.env.Port || 3000);
