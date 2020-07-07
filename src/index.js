@@ -8,7 +8,7 @@ const app = express();
 
 
 
-mongoose.connect('mongodb+srv://dev-location-backend:dev-location-backend-db@cluster0.5qliw.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority', {
+mongoose.connect('mongodb+srv://dev-location-backend:dev-location-backend-db@cluster0.5qliw.gcp.mongodb.net/dev-location?retryWrites=true&w=majority', {
   useNewUrlParser: true,
 });
 app.use(
