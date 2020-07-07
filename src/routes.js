@@ -4,6 +4,10 @@ const SearchController = require('./controllers/SearchController')
 
 const routes = Router();
 
+routes.get('/', (req, res) =>{
+    res.json("teste")
+})
+
 routes.get('/devs', DevController.index)
 routes.post('/devs', DevController.store);
 
