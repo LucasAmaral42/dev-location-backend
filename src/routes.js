@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const axios = require('axios');
-const Dev = require('../models/Dev');
+const Dev = require('./models/Dev');
 const parseStringAsArray = require('../utils/parseStringAsArray');
 
 const routes = Router();
