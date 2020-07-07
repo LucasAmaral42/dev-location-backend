@@ -6,16 +6,9 @@ const routes = require('./routes')
 
 const app = express();
 
-
-
 mongoose.connect('mongodb+srv://dev-location-backend:dev-location-backend-db@cluster0.5qliw.gcp.mongodb.net/dev-location?retryWrites=true&w=majority', {
   useNewUrlParser: true,
 });
-app.use(
-  "/files",
-  express.static(path.resolve(__dirname, ".."))
-)
-
 
 app.use(cors())
 app.use(express.json());
