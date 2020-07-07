@@ -1,18 +1,18 @@
 const { Router } = require('express');
 const axios = require('axios');
 const Dev = require('./models/Dev');
-const parseStringAsArray = require('../utils/parseStringAsArray');
+const parseStringAsArray = require('./utils/parseStringAsArray');
 
 const routes = Router();
 
 routes.get('/devs', async (req, res) => {
     const devs = await Dev.find();
 
-    return response.json(devs);
+    return res.json(devs);
 })
 
 routes.post('/devs', async (req, res) => {
-    const { github_username, techs, latitude, longitude } = request.body;
+    const { github_username, techs, latitude, longitude } = req.body;
 
         let dev = await Dev.findOne({ github_username });
 
@@ -38,11 +38,11 @@ routes.post('/devs', async (req, res) => {
             })
         } 
        
-        return response.json(dev);
+        return res.json(dev);
 });
 
 routes.get('/search', async (req, res) => {
-    const { latitude, longitude, techs } = request.query;
+    const { latitude, longitude, techs } = req.query;
 
         const techsArray = parseStringAsArray(techs);
 
@@ -61,7 +61,7 @@ routes.get('/search', async (req, res) => {
             },
         });
 
-        return response.json({ devs })
+        return res.json({ devs })
 })
 
 module.exports = routes;
