@@ -2,7 +2,8 @@ const { Router } = require('express');
 const axios = require('axios');
 const Dev = require('./models/Dev');
 const parseStringAsArray = require('./utils/parseStringAsArray');
-const checkLocation = require('./utils/checkLocation');
+const checkLocation = require('./utils/changeLocation');
+const changeLocation = require('./utils/changeLocation');
 
 const routes = Router();
 
@@ -13,9 +14,14 @@ routes.get('/devs', async (req, res) => {
 })
 
 routes.post('/devs', async (req, res) => {
-    const { github_username, techs, latitude, longitude } = req.body;
-
+        const { github_username, techs, latitude, longitude } = req.body;
+        
+        let coordinates = [longitude, latitude]
+    
         let dev = await Dev.findOne({ github_username });
+        let loc = await Dev.findOne({ "location.coordinates": coordinates })
+
+        coordinates = loc? changeLocation(coordinates) : coordinates
 
         if (!dev) {
             const apiResponse = await axios.get(`https://api.github.com/users/${github_username}`);
@@ -26,7 +32,7 @@ routes.post('/devs', async (req, res) => {
             
             const location = {
                 type: 'Point',
-                coordinates: checkLocation([longitude, latitude]),
+                coordinates: coordinates,
             }
             
             dev = await Dev.create({
@@ -39,7 +45,7 @@ routes.post('/devs', async (req, res) => {
             })
         }
 
-        return res.json(dev);
+        res.json(dev)
 });
 
 routes.get('/search', async (req, res) => {
