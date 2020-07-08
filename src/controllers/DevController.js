@@ -42,6 +42,13 @@ module.exports = {
                 techs: techsArray,
                 location,
             })
+
+            const sendSocketMessageTo = findConnections(
+                { latitude, longitude },
+                techsArray,
+            )
+
+            sendMessage(sendSocketMessageTo, 'new-dev', dev);
         }
 
         res.json(dev)
