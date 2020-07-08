@@ -1,5 +1,6 @@
 const axios = require('axios');
 const Dev = require('../models/Dev');
+const changeLocation = require('../utils/changeLocation');
 const parseStringAsArray = require('../utils/parseStringAsArray');
 
 // index, show, store, update, destroy
@@ -11,23 +12,28 @@ module.exports = {
         return response.json(devs);
     },
 
-    async store(request, response) {
-        const { github_username, techs, latitude, longitude } = request.body;
+    async store(req, res) {
+        const { github_username, techs, latitude, longitude } = req.body;
+
+        let coordinates = [longitude, latitude]
 
         let dev = await Dev.findOne({ github_username });
+        let loc = await Dev.findOne({ "location.coordinates": coordinates })
+
+        coordinates = loc? changeLocation(coordinates) : coordinates
 
         if (!dev) {
             const apiResponse = await axios.get(`https://api.github.com/users/${github_username}`);
-            
+
             const { name = login, avatar_url, bio} = apiResponse.data;
-            
+
             const techsArray = parseStringAsArray(techs);
-            
+
             const location = {
                 type: 'Point',
-                coordinates: [longitude, latitude],
+                coordinates: coordinates,
             }
-            
+
             dev = await Dev.create({
                 github_username,
                 name,
@@ -36,8 +42,8 @@ module.exports = {
                 techs: techsArray,
                 location,
             })
-        } 
-       
-        return response.json(dev);
+        }
+
+        res.json(dev)
     }
 }
