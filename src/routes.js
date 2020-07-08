@@ -2,6 +2,7 @@ const { Router } = require('express');
 const axios = require('axios');
 const Dev = require('./models/Dev');
 const parseStringAsArray = require('./utils/parseStringAsArray');
+const checkLocation = require('./utils/checkLocation');
 
 const routes = Router();
 
@@ -25,7 +26,7 @@ routes.post('/devs', async (req, res) => {
             
             const location = {
                 type: 'Point',
-                coordinates: [longitude, latitude],
+                coordinates: checkLocation([longitude, latitude]),
             }
             
             dev = await Dev.create({
@@ -36,8 +37,8 @@ routes.post('/devs', async (req, res) => {
                 techs: techsArray,
                 location,
             })
-        } 
-       
+        }
+
         return res.json(dev);
 });
 
